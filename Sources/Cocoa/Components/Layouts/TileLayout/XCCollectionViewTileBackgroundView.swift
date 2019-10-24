@@ -116,23 +116,18 @@ final class XCCollectionViewTileStackSelector: UICollectionReusableView {
         commonInit()
     }
 
-    private let leadingButton = UIButton().apply {
+    private lazy var leadingButton = UIButton().apply {
         $0.text = "Show less"
-        $0.addTarget(self, action: #selector(leadingButtonAction), for: .touchUpInside)
+        $0.action { [weak self] _ in
+            self?.buttonTappedHandler?(.left)
+        }
     }
 
-    private let trailingButton = UIButton().apply {
+    private lazy var trailingButton = UIButton().apply {
         $0.text = "Clear"
-        $0.addTarget(self, action: #selector(trailingButtonAction), for: .touchUpInside)
-    }
-
-    @objc
-    private func leadingButtonAction() {
-        buttonTappedHandler?(.left)
-    }
-    @objc
-    private func trailingButtonAction() {
-        buttonTappedHandler?(.right)
+        $0.action { [weak self] _ in
+            self?.buttonTappedHandler?(.right)
+        }
     }
 
     private var buttonTappedHandler: ((XCCollectionViewTileLayoutAction) -> Void)?
