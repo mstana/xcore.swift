@@ -117,14 +117,14 @@ final class XCCollectionViewTileStackSelector: UICollectionReusableView {
     }
 
     private lazy var leadingButton = UIButton().apply {
-        $0.text = "Show less"
+        $0.text = "Show less" // TODO: solve localization
         $0.action { [weak self] _ in
             self?.buttonTappedHandler?(.left)
         }
     }
 
     private lazy var trailingButton = UIButton().apply {
-        $0.text = "Clear"
+        $0.text = "Clear"  // TODO: solve localization
         $0.action { [weak self] _ in
             self?.buttonTappedHandler?(.right)
         }
@@ -137,10 +137,10 @@ final class XCCollectionViewTileStackSelector: UICollectionReusableView {
         addSubview(trailingButton)
         
         leadingButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
+            make.leading.equalToSuperview().inset(.minimumPadding)
         }
         trailingButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview()
+            make.trailing.equalToSuperview().inset(.minimumPadding)
         }
     }
 
