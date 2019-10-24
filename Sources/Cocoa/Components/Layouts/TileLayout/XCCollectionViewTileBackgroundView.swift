@@ -116,21 +116,44 @@ final class XCCollectionViewTileStackSelector: UICollectionReusableView {
         commonInit()
     }
 
-    private let button = UIButton().apply {
-        $0.text = "Tap me boy!"
-        $0.addAction(.touchUpInside) { _ in
-            print("This button was tapped")
-        }
+    private let leadingButton = UIButton().apply {
+        $0.text = "Show less"
+        $0.addTarget(self, action: #selector(leadingButtonAction), for: .touchUpInside)
     }
 
+    private let trailingButton = UIButton().apply {
+        $0.text = "Clear"
+        $0.addTarget(self, action: #selector(trailingButtonAction), for: .touchUpInside)
+    }
+
+    @objc
+    private func leadingButtonAction() {
+        buttonTappedHandler?(.left)
+    }
+    @objc
+    private func trailingButtonAction() {
+        buttonTappedHandler?(.right)
+    }
+
+    private var buttonTappedHandler: ((XCCollectionViewTileLayoutAction) -> Void)?
+
     private func commonInit() {
-        addSubview(button)
-        button.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+        addSubview(leadingButton)
+        addSubview(trailingButton)
+        
+        leadingButton.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+        }
+        trailingButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview()
         }
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
+
+        if let tileAttributes = layoutAttributes as? XCCollectionViewTileLayout.Attributes {
+            buttonTappedHandler = tileAttributes.actionHandler
+        }
     }
 }

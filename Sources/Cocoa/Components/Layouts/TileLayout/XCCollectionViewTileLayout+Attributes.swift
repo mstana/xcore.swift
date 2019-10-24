@@ -24,11 +24,16 @@
 
 import UIKit
 
+public enum XCCollectionViewTileLayoutAction {
+    case left, right
+}
+
 extension XCCollectionViewTileLayout {
     final class Attributes: XCCollectionViewFlowLayout.Attributes {
         var corners: (corners: UIRectCorner, radius: CGFloat) = (.none, 0)
         var isAutosizeEnabled: Bool = false
         var offsetInSection: CGFloat = 0
+        var actionHandler: ((XCCollectionViewTileLayoutAction) -> Void)?
 
         override func copy(with zone: NSZone? = nil) -> Any {
             guard let copy = super.copy(with: zone) as? Attributes else {
@@ -37,6 +42,7 @@ extension XCCollectionViewTileLayout {
             copy.isAutosizeEnabled = isAutosizeEnabled
             copy.corners = corners
             copy.offsetInSection = offsetInSection
+            copy.actionHandler = actionHandler
             return copy
         }
     }

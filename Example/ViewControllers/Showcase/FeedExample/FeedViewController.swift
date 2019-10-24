@@ -28,10 +28,13 @@ final class FeedViewController: XCComposedCollectionViewController {
     private var sources = [FeedDataSource]()
     private var isStackingEnabled = false {
         didSet {
-            let newLayout = XCCollectionViewTileLayout().apply {
-                $0.isStackingEnabled = isStackingEnabled
-            }
-            collectionView.setCollectionViewLayout(newLayout, animated: true)
+            collectionView.performBatchUpdates({
+                if isStackingEnabled {
+                    (collectionView.collectionViewLayout as? XCCollectionViewTileLayout)?.stackingState = .stacked
+                } else {
+                    (collectionView.collectionViewLayout as? XCCollectionViewTileLayout)?.stackingState = .unstacked
+                }
+            })
         }
     }
 
@@ -44,10 +47,16 @@ final class FeedViewController: XCComposedCollectionViewController {
         recreateSources()
         layout = .init(XCCollectionViewTileLayout())
 
-        Timer.scheduledTimer(withTimeInterval: 6, repeats: true) { [weak self] _ in
-            self?.isStackingEnabled.toggle()
+        (collectionView.collectionViewLayout as? XCCollectionViewTileLayout)?.stackItemsCount = 5
+        isStackingEnabled = true
+        (collectionView.collectionViewLayout as? XCCollectionViewTileLayout)?.actionHandler = { [weak self] action in
+            switch action {
+                case .left:
+                    self?.isStackingEnabled = true
+                case .right:
+                    print("Right button action tapped")
+            }
         }
-
     }
 
     override func dataSources(for collectionView: UICollectionView) -> [XCCollectionViewDataSource] {
@@ -56,14 +65,17 @@ final class FeedViewController: XCComposedCollectionViewController {
 
     private func recreateSources() {
         sources.removeAll()
-        let sourcesCount = Int.random(in: 100...120)
-
-        for i in 0..<sourcesCount {
+        let sourcesCount = 50
+        for _ in 0..<sourcesCount {
             let source = FeedDataSource(collectionView: collectionView)
             sources.append(source)
         }
 
         composedDataSource.dataSources = dataSources(for: collectionView)
         collectionView.reloadData()
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        isStackingEnabled.toggle()
     }
 }
