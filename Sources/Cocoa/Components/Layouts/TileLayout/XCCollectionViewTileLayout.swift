@@ -28,8 +28,10 @@ open class XCCollectionViewTileLayout: UICollectionViewLayout, DimmableLayout {
     private let UICollectionElementKindSectionBackground = "UICollectionElementKindSectionBackground"
     private let UICollectionElementKindSectionStacked = "UICollectionElementKindSectionStacked"
 
-    public enum StackingState {
-        case none, unstacked, stacked
+    public enum StackState {
+        case none // Does not take stacking
+        case unstacked // Adds decoration view with header for stacked section
+        case stacked // Compress stacked sections and remove heeader
     }
 
     public var actionHandler: ((XCCollectionViewTileLayoutAction) -> Void)?
@@ -85,7 +87,7 @@ open class XCCollectionViewTileLayout: UICollectionViewLayout, DimmableLayout {
 
     public var estimatedItemHeight: CGFloat = 200
     public var estimatedHeaderFooterHeight: CGFloat = 44
-    public var stackingState: StackingState = .none {
+    public var stackingState: StackState = .none {
         willSet {
             shouldReloadAttributes = true
         }
