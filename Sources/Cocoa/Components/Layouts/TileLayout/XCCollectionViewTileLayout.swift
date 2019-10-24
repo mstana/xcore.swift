@@ -286,7 +286,7 @@ open class XCCollectionViewTileLayout: UICollectionViewLayout, DimmableLayout {
                 // Create section rect
                 sectionRects.append(CGRect(origin: offset, size: CGSize(width: itemWidth, height: 0)))
                 // Update height of section rect
-                sectionRects[section].size.height = createAttributes(for: section, itemWidth: itemWidth, itemCount: itemCount, zIndex: zIndex)
+                sectionRects[section].size.height = createAttributes(for: section, itemWidth: itemWidth, itemCount: itemCount, zIndex: zIndex, preferedHeight: stackedInfo?.previousHeight)
             } else {
                 sectionRects[section].origin = offset
             }
@@ -311,7 +311,7 @@ open class XCCollectionViewTileLayout: UICollectionViewLayout, DimmableLayout {
         cachedContentSize = CGSize(width: collectionView.bounds.width, height: self.maxColumn(self.columnsHeight).height + verticalSpacing)
     }
 
-    private func createAttributes(for section: Int, itemWidth: CGFloat, itemCount: Int, zIndex: Int = 0, addStackedHeader: Bool = false) -> CGFloat {
+    private func createAttributes(for section: Int, itemWidth: CGFloat, itemCount: Int, zIndex: Int = 0, addStackedHeader: Bool = false, preferedHeight: CGFloat? = nil) -> CGFloat {
         var offsetInSection: CGFloat = 0
         var sectionAttributes = [Attributes]()
         guard itemCount > 0 else {
@@ -396,6 +396,16 @@ open class XCCollectionViewTileLayout: UICollectionViewLayout, DimmableLayout {
             offsetInSection += attributes.size.height
             sectionAttributes.append(attributes)
         }
+
+        if let preferedHeight = preferedHeight, section < stackItemsCount {
+            let resizeRatio = preferedHeight/offsetInSection
+            for attribtues in sectionAttributes {
+                attribtues.offsetInSection *= resizeRatio
+                attribtues.frame.size.height *= resizeRatio
+            }
+            offsetInSection = preferedHeight
+        }
+
         attributesBySection.append(sectionAttributes)
         return offsetInSection
     }
