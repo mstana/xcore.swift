@@ -28,13 +28,12 @@ final class FeedViewController: XCComposedCollectionViewController {
     private var sources = [FeedDataSource]()
     private var isStackingEnabled = false {
         didSet {
-            collectionView.performBatchUpdates({
-                if isStackingEnabled {
-                    (collectionView.collectionViewLayout as? XCCollectionViewTileLayout)?.stackingState = .stacked
-                } else {
-                    (collectionView.collectionViewLayout as? XCCollectionViewTileLayout)?.stackingState = .unstacked
-                }
-            })
+            if isStackingEnabled {
+                (collectionView.collectionViewLayout as? XCCollectionViewTileLayout)?.stackingState = .stacked
+            } else {
+                (collectionView.collectionViewLayout as? XCCollectionViewTileLayout)?.stackingState = .unstacked
+            }
+            collectionView.performBatchUpdates(nil)
         }
     }
 
@@ -57,6 +56,14 @@ final class FeedViewController: XCComposedCollectionViewController {
                     print("Right button action tapped")
             }
         }
+        let item = UIBarButtonItem(title: "DO!", style: .plain, target: self, action: #selector(doIt))
+
+        navigationItem.rightBarButtonItems = [item]
+    }
+
+    @objc
+    func doIt() {
+        isStackingEnabled.toggle()
     }
 
     override func dataSources(for collectionView: UICollectionView) -> [XCCollectionViewDataSource] {
