@@ -401,6 +401,7 @@ open class XCCollectionViewTileLayout: UICollectionViewLayout, DimmableLayout {
             let resizeRatio = preferedHeight/offsetInSection
             for attribtues in sectionAttributes {
                 attribtues.offsetInSection *= resizeRatio
+                attribtues.frame.origin = CGPoint(x: attribtues.frame.origin.x, y: attribtues.frame.origin.y * resizeRatio)
                 attribtues.frame.size.height *= resizeRatio
             }
             offsetInSection = preferedHeight

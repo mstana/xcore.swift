@@ -196,7 +196,7 @@ class CustomLayout : UICollectionViewLayout {
             let itemsCounts = collectionView.numberOfItems(inSection: 0)
             for item in 0..<itemsCounts {
                 let indexPath = IndexPath(item: item, section: 0)
-                let columHeight = 70
+                let columHeight = 70 + (isStackEnabled ? 0 : 10 * item)
 
                 // TODO: Rewrite this to use bottom to stack not top!
                 let frame = CGRect(x: 0, y: y, width: Int(columWidth), height: columHeight)
@@ -211,9 +211,6 @@ class CustomLayout : UICollectionViewLayout {
                 let scaling = (1.0 - ( CGFloat(item) / CGFloat(itemsCounts)/2 ))
                 let alphing = item < 4 ? (1.0 - ( CGFloat(item) / CGFloat(itemsCounts) )) : 1
 //                attributes.transform = isStackEnabled && (item < 4) ? CGAffineTransform(scaleX: scaling, y: scaling) : .identity
-                if isStackEnabled {
-                    attributes.frame.size = CGSize(width: attributes.frame.size.width, height: attributes.frame.size.height - CGFloat(item*10))
-                }
                 attributes.alpha = isStackEnabled ? alphing : 1.0
                 cache.append(attributes)
                 contentHeight = max(contentHeight, CGFloat(y))

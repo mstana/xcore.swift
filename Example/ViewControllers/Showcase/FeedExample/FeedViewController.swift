@@ -28,12 +28,17 @@ final class FeedViewController: XCComposedCollectionViewController {
     private var sources = [FeedDataSource]()
     private var isStackingEnabled = false {
         didSet {
-            if isStackingEnabled {
-                (collectionView.collectionViewLayout as? XCCollectionViewTileLayout)?.stackingState = .stacked
-            } else {
-                (collectionView.collectionViewLayout as? XCCollectionViewTileLayout)?.stackingState = .unstacked
-            }
-            collectionView.performBatchUpdates(nil)
+
+//            if let oldLayout = collectionView.collectionViewLayout as? XCCollectionViewTileLayout {
+//                let newLayout = XCCollectionViewTileLayout()
+//                newLayout.stackItemsCount = oldLayout.stackItemsCount
+//                newLayout.stackingState = isStackingEnabled ? .stacked : .unstacked
+//                collectionView.setCollectionViewLayout(newLayout, animated: true)
+//            }
+
+            collectionView.performBatchUpdates({
+                (collectionView.collectionViewLayout as? XCCollectionViewTileLayout)?.stackingState = isStackingEnabled ? .stacked : .unstacked
+            })
         }
     }
 
