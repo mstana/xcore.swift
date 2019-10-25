@@ -57,6 +57,7 @@
 		68BCA2DD2304B2B000424B85 /* SeparatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BCA2DC2304B2B000424B85 /* SeparatorViewController.swift */; };
 		68CA631F224C76760012DF31 /* StringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CA631E224C76750012DF31 /* StringTests.swift */; };
 		7118C4282326B93100821180 /* ExamplePickerListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7118C4272326B93100821180 /* ExamplePickerListModel.swift */; };
+		D263A7ED236205A2009FA34C /* CleanFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D263A7EC236205A2009FA34C /* CleanFeedViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,6 +140,7 @@
 		989B05E63B9D27BBB2D81B2C /* Pods-UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-UITests/Pods-UITests.release.xcconfig"; sourceTree = "<group>"; };
 		9B4A87B278E5152219B8BDDE /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		C6C1CBC1C9F9F312C6AB78E6 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
+		D263A7EC236205A2009FA34C /* CleanFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanFeedViewController.swift; sourceTree = "<group>"; };
 		E48E508CA76C1ED6E256FBF4 /* Pods-UnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UnitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UnitTests/Pods-UnitTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -179,6 +181,7 @@
 				2F9B4C8322A19E7400FB644E /* FeedTextViewCell.swift */,
 				2FF93A0322A9EF83008E4AAA /* FeedColorViewCell.swift */,
 				2F9B4C8522A1BC4700FB644E /* FeedTextHeaderFooterViewCell.swift */,
+				D263A7EC236205A2009FA34C /* CleanFeedViewController.swift */,
 			);
 			path = FeedExample;
 			sourceTree = "<group>";
@@ -656,6 +659,7 @@
 			files = (
 				6836600D22987F3700FDE45B /* Swizzle.swift in Sources */,
 				68BCA2DD2304B2B000424B85 /* SeparatorViewController.swift in Sources */,
+				D263A7ED236205A2009FA34C /* CleanFeedViewController.swift in Sources */,
 				2F9B4C8422A19E7400FB644E /* FeedTextViewCell.swift in Sources */,
 				684B1EA1224C5218009F6197 /* AppDelegate.swift in Sources */,
 				7118C4282326B93100821180 /* ExamplePickerListModel.swift in Sources */,
