@@ -107,10 +107,14 @@ extension UIApplication {
 
     /// Iterates through `windows` from top to bottom and returns the visible window.
     ///
+    /// We can not present anything on UITextEffectsWindow. Because of this
+    /// we need to exclude this type of UIWindow from reasonable candidates
+    /// (UITextEffectsWindow have windowLebel equal to 10.0)
+    ///
     /// - Returns: Returns an optional window object based on visibility.
     /// - Complexity: O(_n_), where _n_ is the length of the `windows` array.
     open var visibleWindow: UIWindow? {
-        windows.reversed().first { !$0.isHidden }
+        windows.reversed().first { !$0.isHidden && $0.windowLevel.rawValue != 10.0 }
     }
 }
 
