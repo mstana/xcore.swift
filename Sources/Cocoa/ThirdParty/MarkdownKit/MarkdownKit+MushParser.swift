@@ -106,7 +106,7 @@ final class MarkdownCustomFont: MarkdownElement {
 
 final class MarkdownUnderline: MarkdownElement {
     var regex: String {
-        "(=_)((.|\n|\r)+?)(=_)"
+        "(\\{underline)(\\|)((.|\n|\r)+?)(\\})"
     }
 
     func regularExpression() throws -> NSRegularExpression {
@@ -114,7 +114,7 @@ final class MarkdownUnderline: MarkdownElement {
     }
 
     func match(_ match: NSTextCheckingResult, attributedString: NSMutableAttributedString) {
-        let textRange = match.range(at: 2)
+        let textRange = match.range(at: 3)
         let attributesFromString = attributedString.attributedSubstring(from: textRange)
         let formattedString = NSMutableAttributedString(attributedString: attributesFromString)
         formattedString.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: textRange.length))
