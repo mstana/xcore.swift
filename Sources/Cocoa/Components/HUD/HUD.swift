@@ -239,6 +239,7 @@ open class HUD: Appliable {
             view.alpha = 0
             UIView.animate(withDuration: duration, animations: {
                 self.view.alpha = 1
+                UIAccessibility.post(notification: .screenChanged, argument: nil)
             }, completion: { _ in
                 completion?()
             })
