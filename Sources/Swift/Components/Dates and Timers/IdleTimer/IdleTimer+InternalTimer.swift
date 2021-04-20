@@ -12,7 +12,7 @@ extension IdleTimer {
         private var uptime = MonotonicClock.Uptime()
         private var timer: MonotonicClock.Timer?
         private let onTimeout: () -> Void
-
+        var logoutWarning: String
         /// The timeout duration in seconds, after which `onTimeout` is invoked.
         var timeoutDuration: TimeInterval {
             didSet {
@@ -29,9 +29,10 @@ extension IdleTimer {
         ///   - duration: The timeout duration in seconds, after which `onTimeout` is
         ///     invoked.
         ///   - onTimeout: The closure to invoke after timeout duration has passed.
-        init(timeoutAfter duration: TimeInterval, onTimeout: @escaping () -> Void) {
+        init(timeoutAfter duration: TimeInterval, logoutWarning: String = "", onTimeout: @escaping () -> Void) {
             self.timeoutDuration = duration
             self.onTimeout = onTimeout
+            self.logoutWarning = logoutWarning
             restart()
             setupObservers()
         }
@@ -65,7 +66,7 @@ extension IdleTimer {
 
         private func handleVOAnnouncement() {
             if UIAccessibility.isVoiceOverRunning {
-                UIAccessibility.post(notification: .announcement, argument: "You will be logged out in 30 seconds, double tap anywhere on the screen to continue the session.")
+                UIAccessibility.post(notification: .announcement, argument: self.logoutWarning)
             }
         }
 

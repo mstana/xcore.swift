@@ -30,12 +30,6 @@ extension NotificationCenter.Event {
     public func applicationDidTimeOutUserInteraction(_ callback: @escaping () -> Void) -> NSObjectProtocol {
         observe(UIApplication.didTimeOutUserInteractionNotification, callback)
     }
-
-    /// - See: `IdleTimer.setUserInteractionTimeout(duration:for:)`
-    @discardableResult
-    public func applicationWillTimeOutIdleTimerNotification(_ callback: @escaping () -> Void) -> NSObjectProtocol {
-        observe(UIApplication.willTimeOutIdleTimerNotification, callback)
-    }
 }
 
 // MARK: - Gesture
@@ -64,6 +58,7 @@ extension IdleTimer {
     final class WindowContainer {
         private let timer1: InternalTimer
         private let timer2: InternalTimer
+        var logoutWarning = ""
         private let warningTimer: TimeInterval = 10 // seconds before voiceover announces the logout warning
 
         /// The timeout duration in seconds, after which idle timer notification is
@@ -73,6 +68,7 @@ extension IdleTimer {
             set {
                 timer1.timeoutDuration = newValue
                 timer2.timeoutDuration = max(0, newValue - warningTimer)
+                timer2.logoutWarning = self.logoutWarning
             }
         }
 
@@ -81,7 +77,7 @@ extension IdleTimer {
                 NotificationCenter.default.post(name: UIApplication.didTimeOutUserInteractionNotification, object: nil)
             }
 
-            timer2 = .init(timeoutAfter: 0) {
+            timer2 = .init(timeoutAfter: 0, logoutWarning: logoutWarning) {
                 NotificationCenter.default.post(name: UIApplication.willTimeOutIdleTimerNotification, object: nil)
             }
         }
@@ -95,6 +91,7 @@ extension IdleTimer {
             let newGesture = Gesture { [weak self] in
                 self?.timer1.wake()
                 self?.timer2.wake()
+                self?.timer2.logoutWarning = self?.logoutWarning ?? ""
             }
             window.addGestureRecognizer(newGesture)
         }
