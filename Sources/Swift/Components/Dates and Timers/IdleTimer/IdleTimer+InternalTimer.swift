@@ -47,7 +47,7 @@ extension IdleTimer {
             }
 
             on(UIApplication.willTimeOutIdleTimerNotification) {
-                $0.handleVOAnnouncement()
+                $0.handleLogoutWarning()
             }
         }
 
@@ -64,9 +64,9 @@ extension IdleTimer {
             })
         }
 
-        private func handleVOAnnouncement() {
+        private func handleLogoutWarning() {
             if UIAccessibility.isVoiceOverRunning {
-                UIAccessibility.post(notification: .announcement, argument: self.logoutWarning)
+                return onTimeout()
             }
         }
 

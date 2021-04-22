@@ -67,7 +67,7 @@ extension IdleTimer {
             get { timer.timeoutDuration }
             set {
                 timer.timeoutDuration = newValue
-                warningTimer.timeoutDuration = max(0, newValue - warningTimer)
+                warningTimer.timeoutDuration = max(0, newValue - warningTime)
                 warningTimer.logoutWarning = self.logoutWarning
             }
         }
@@ -77,8 +77,9 @@ extension IdleTimer {
                 NotificationCenter.default.post(name: UIApplication.didTimeOutUserInteractionNotification, object: nil)
             }
 
-            warningTimer = .init(timeoutAfter: 0, logoutWarning: logoutWarning) {
+            warningTimer = .init(timeoutAfter: 0, logoutWarning: self.logoutWarning) {
                 NotificationCenter.default.post(name: UIApplication.willTimeOutIdleTimerNotification, object: nil)
+                UIAccessibility.post(notification: .announcement, argument: logoutWarning)
             }
         }
 
