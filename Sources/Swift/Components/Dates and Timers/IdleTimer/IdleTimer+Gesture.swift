@@ -30,6 +30,12 @@ extension NotificationCenter.Event {
     public func applicationDidTimeOutUserInteraction(_ callback: @escaping () -> Void) -> NSObjectProtocol {
         observe(UIApplication.didTimeOutUserInteractionNotification, callback)
     }
+
+    /// - See: `IdleTimer.setUserInteractionTimeout(duration:for:)`
+    @discardableResult
+    public func applicationWillTimeOutIdleTimerNotification(_ callback: @escaping () -> Void) -> NSObjectProtocol {
+        observe(UIApplication.willTimeOutIdleTimerNotification, callback)
+    }
 }
 
 // MARK: - Gesture
@@ -58,7 +64,6 @@ extension IdleTimer {
     final class WindowContainer {
         private let timer: InternalTimer
         private let warningTimer: InternalTimer
-        var logoutWarning = ""
         private let warningTime: TimeInterval = 10 // seconds before voiceover announces the logout warning
 
         /// The timeout duration in seconds, after which idle timer notification is
@@ -68,7 +73,6 @@ extension IdleTimer {
             set {
                 timer.timeoutDuration = newValue
                 warningTimer.timeoutDuration = max(0, newValue - warningTime)
-                warningTimer.logoutWarning = self.logoutWarning
             }
         }
 
@@ -77,9 +81,8 @@ extension IdleTimer {
                 NotificationCenter.default.post(name: UIApplication.didTimeOutUserInteractionNotification, object: nil)
             }
 
-            warningTimer = .init(timeoutAfter: 0, logoutWarning: self.logoutWarning) {
+            warningTimer = .init(timeoutAfter: 0) {
                 NotificationCenter.default.post(name: UIApplication.willTimeOutIdleTimerNotification, object: nil)
-                UIAccessibility.post(notification: .announcement, argument: logoutWarning)
             }
         }
 
@@ -92,7 +95,6 @@ extension IdleTimer {
             let newGesture = Gesture { [weak self] in
                 self?.timer.wake()
                 self?.warningTimer.wake()
-                self?.warningTimer.logoutWarning = self?.logoutWarning ?? ""
             }
             window.addGestureRecognizer(newGesture)
         }
