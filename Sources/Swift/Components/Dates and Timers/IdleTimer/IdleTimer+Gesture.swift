@@ -64,7 +64,7 @@ extension IdleTimer {
     final class WindowContainer {
         private let timer: InternalTimer
         private let warningTimer: InternalTimer
-        private let warningTime: TimeInterval = 10 // seconds before voiceover announces the logout warning
+        private let warningTime: TimeInterval = 30 // seconds before voiceover announces the logout warning
 
         /// The timeout duration in seconds, after which idle timer notification is
         /// posted.
