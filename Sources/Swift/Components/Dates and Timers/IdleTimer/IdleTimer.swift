@@ -19,7 +19,7 @@ extension IdleTimer {
     ///
     /// You can observe the timeout event using
     /// `UIApplication.didTimeOutUserInteractionNotification`.
-        public static func setUserInteractionTimeout(duration: TimeInterval? = nil, for window: UIWindow?) {
+    public static func setUserInteractionTimeout(duration: TimeInterval? = nil, for window: UIWindow?) {
         guard let window = window else {
             return
         }

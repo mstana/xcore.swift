@@ -17,7 +17,7 @@ extension UIApplication {
     }
 
     /// - See: `IdleTimer.willTimeoutIdleTimer(duration:for:)`
-    public static var willTimeOutIdleTimerNotification: Notification.Name {
+    public static var willTimeOutUserInteractionNotification: Notification.Name {
         .init(#function)
     }
 }
@@ -33,8 +33,8 @@ extension NotificationCenter.Event {
 
     /// - See: `IdleTimer.setUserInteractionTimeout(duration:for:)`
     @discardableResult
-    public func applicationWillTimeOutIdleTimerNotification(_ callback: @escaping () -> Void) -> NSObjectProtocol {
-        observe(UIApplication.willTimeOutIdleTimerNotification, callback)
+    public func applicationWillTimeOutUserInteraction(_ callback: @escaping () -> Void) -> NSObjectProtocol {
+        observe(UIApplication.willTimeOutUserInteractionNotification, callback)
     }
 }
 
@@ -82,7 +82,7 @@ extension IdleTimer {
             }
 
             warningTimer = .init(timeoutAfter: 0) {
-                NotificationCenter.default.post(name: UIApplication.willTimeOutIdleTimerNotification, object: nil)
+                NotificationCenter.default.post(name: UIApplication.willTimeOutUserInteractionNotification, object: nil)
             }
         }
 
