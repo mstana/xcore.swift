@@ -12,6 +12,7 @@ extension IdleTimer {
         private var uptime = MonotonicClock.Uptime()
         private var timer: MonotonicClock.Timer?
         private let onTimeout: () -> Void
+
         /// The timeout duration in seconds, after which `onTimeout` is invoked.
         var timeoutDuration: TimeInterval {
             didSet {
