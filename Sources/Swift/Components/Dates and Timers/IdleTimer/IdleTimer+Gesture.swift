@@ -53,6 +53,10 @@ extension IdleTimer {
     final class WindowContainer {
         private let timer: InternalTimer
 
+        /// When VoiceOver is on we need to keep track of movement so we are not locking user
+        /// out accidnetally.
+        private var voiceOverElementObserver: NSObjectProtocol?
+
         /// The timeout duration in seconds, after which idle timer notification is
         /// posted.
         var timeoutDuration: TimeInterval {
@@ -64,6 +68,13 @@ extension IdleTimer {
             timer = .init(timeoutAfter: 0) {
                 NotificationCenter.default.post(name: UIApplication.didTimeOutUserInteractionNotification, object: nil)
             }
+            voiceOverElementObserver = NotificationCenter.on.accessibilityVoiceOverElementFocusedNotification { [weak self] in
+                self?.timer.wake()
+            }
+        }
+
+        deinit {
+            NotificationCenter.remove(voiceOverElementObserver)
         }
 
         func add(_ window: UIWindow) {
