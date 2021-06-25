@@ -15,6 +15,11 @@ extension UIApplication {
     public static var didTimeOutUserInteractionNotification: Notification.Name {
         .init(#function)
     }
+
+    /// - See: `IdleTimer.willTimeoutIdleTimer(duration:for:)`
+    public static var willTimeOutUserInteractionNotification: Notification.Name {
+        .init(#function)
+    }
 }
 
 extension NotificationCenter.Event {
@@ -24,6 +29,12 @@ extension NotificationCenter.Event {
     @discardableResult
     public func applicationDidTimeOutUserInteraction(_ callback: @escaping () -> Void) -> NSObjectProtocol {
         observe(UIApplication.didTimeOutUserInteractionNotification, callback)
+    }
+
+    /// - See: `IdleTimer.setUserInteractionTimeout(duration:for:)`
+    @discardableResult
+    public func applicationWillTimeOutUserInteraction(_ callback: @escaping () -> Void) -> NSObjectProtocol {
+        observe(UIApplication.willTimeOutUserInteractionNotification, callback)
     }
 }
 
@@ -52,17 +63,29 @@ extension IdleTimer {
 extension IdleTimer {
     final class WindowContainer {
         private let timer: InternalTimer
+        private let warningTimer: InternalTimer
+
+        /// The timeout in seconds specifies the duration before the main `timer` notification is posted and will
+        /// result in posting separate warning notification.
+        private let warningTime: TimeInterval = 30 // seconds before voiceover announces the logout warning
 
         /// The timeout duration in seconds, after which idle timer notification is
         /// posted.
         var timeoutDuration: TimeInterval {
             get { timer.timeoutDuration }
-            set { timer.timeoutDuration = newValue }
+            set {
+                timer.timeoutDuration = newValue
+                warningTimer.timeoutDuration = max(0, newValue - warningTime)
+            }
         }
 
         init() {
             timer = .init(timeoutAfter: 0) {
                 NotificationCenter.default.post(name: UIApplication.didTimeOutUserInteractionNotification, object: nil)
+            }
+
+            warningTimer = .init(timeoutAfter: 0) {
+                NotificationCenter.default.post(name: UIApplication.willTimeOutUserInteractionNotification, object: nil)
             }
         }
 
@@ -74,6 +97,7 @@ extension IdleTimer {
 
             let newGesture = Gesture { [weak self] in
                 self?.timer.wake()
+                self?.warningTimer.wake()
             }
             window.addGestureRecognizer(newGesture)
         }
